@@ -152,8 +152,13 @@ fileprivate extension Shine {
 							let infoDictionary = Bundle.main.infoDictionary!
 							let displayVersion = infoDictionary["CFBundleShortVersionString"] as? String
 							let bundleDisplayname = infoDictionary["CFBundleName"] as? String
-							let noUpdateAlert = UIAlertController(title: NSLocalizedString("UpToDate", comment:"You’re up-to-date!"), message: NSLocalizedString("LatestVersion", comment:"\(bundleDisplayname ?? "Version") \(displayVersion ?? currentVersionCode) is currently the newest version available."), preferredStyle: .alert)
-							noUpdateAlert.addAction(UIAlertAction(title: NSLocalizedString("OKBtn", comment:"OK"), style: .cancel, handler: nil))
+              
+//              let message = "\(bundleDisplayname ?? "Version") \(displayVersion ?? currentVersionCode) " +
+              let fmtMessage = localString("LatestVersion", comment: "is currently the newest version available.")
+              let message = String(format: fmtMessage, "\(bundleDisplayname) \(displayVersion ?? currentVersionCode)")
+							let noUpdateAlert = UIAlertController(title: localString("UpToDate", comment:"You’re up-to-date!"),
+                                                    message: message, preferredStyle: .alert)
+							noUpdateAlert.addAction(UIAlertAction(title: localString("OKBtn", comment:"OK"), style: .cancel, handler: nil))
 							
 							if let rootVC = UIApplication.shared.keyWindow?.rootViewController {
 								noUpdateAlert.present(from: rootVC, animated: true, completion: nil)
@@ -206,31 +211,37 @@ fileprivate extension Shine {
 			return
 		}
 		let displayVersion = infoDictionary["CFBundleShortVersionString"] as? String
-		let bundleDisplayname = infoDictionary["CFBundleName"] as? String
+		let bundleDisplayname = infoDictionary["CFBundleDisplayName"] as? String
 		
 		var releaseNotes = ""
 		if var content = toVersion.releaseNotes, self.config.showReleaseNotes {
       //:-- content 由';'分割，移除空格后拼接多行
       content = content.split(separator: ";").map {
-        $0.trimmingCharacters(in: CharacterSet(charactersIn: " "))
+        $0.trimmingCharacters(in: CharacterSet(charactersIn: " ；"))
       }.joined(separator: "\n")
       
       
-      releaseNotes = NSLocalizedString("ReleaseNote", comment: "\n\nRelease Notes:\n\n\(content)")
+      releaseNotes = localString("ReleaseNote", comment: "\n\nRelease Notes:\n\n") + "\(content)"
 		}
 		
-		let updateStatement = (toVersion.forcedUpdate) ?NSLocalizedString("ForceUpdate", comment: "This is a required update."): NSLocalizedString("UpdatePrompt", comment: "Would you like to update now?")
-		
-    let updateAlert = UIAlertController(title: NSLocalizedString("NewVersionMessageTitle", comment:"A new version of \(bundleDisplayname ?? "this app") is available!"), message: NSLocalizedString("NewVersionMessageBody", comment:"\(bundleDisplayname ?? "") \(toVersion.displayVersion ?? toVersion.versionCode) is now available—you have \(displayVersion ?? currentVersionCode). \(updateStatement)\(releaseNotes)"), preferredStyle: .alert)
+		let updateStatement = (toVersion.forcedUpdate) ? localString("ForceUpdate", comment: "This is a required update.") : localString("UpdatePrompt", comment: "Would you like to update now?")
+    
+//    let title = "\(bundleDisplayname ?? localString("thisApp", comment: "this app") )" + localString("NewVersionMessageTitle", comment: ": A new version is avaliable!")
+    let fmtTitle = localString("NewVersionMessageTitle", comment: ": A new version is avaliable!")
+    let title = String(format: fmtTitle, bundleDisplayname ?? localString("thisApp", comment: "this app"))
+    
+//    let fmtMessage =
+    let message = "\(bundleDisplayname ?? "") \(toVersion.displayVersion ?? toVersion.versionCode) " + localString("NewVersionMessageBody", comment: "is now available—you have") + " \(displayVersion ?? currentVersionCode). \(updateStatement)\(releaseNotes)"
+    let updateAlert = UIAlertController(title: title, message: message, preferredStyle: .alert)
 		updateAlert.messageLabel?.textAlignment = .left
 		
 		if !toVersion.forcedUpdate {
-			updateAlert.addAction(UIAlertAction(title: NSLocalizedString("RemindLater", comment:"Remind me Later"), style: .cancel) { _ in
+			updateAlert.addAction(UIAlertAction(title: localString("RemindLater", comment:"Remind me Later"), style: .cancel) { _ in
 				self.selectedRemindLaterDate = Date()
 			})
 		}
 		
-		updateAlert.addAction(UIAlertAction(title: NSLocalizedString("InstallUpdate", comment:"Install Update"), style: .default) { _ in
+		updateAlert.addAction(UIAlertAction(title: localString("InstallUpdate", comment: "Install Update"), style: .default) { _ in
 			self.beginUpdateProcess(toVersion: toVersion)
 		})
 		
@@ -238,8 +249,8 @@ fileprivate extension Shine {
 			updateAlert.present(from: rootVC, animated: true, completion: nil)
 		}
 	}
-	
-	private func beginUpdateProcess(toVersion: AppCastItem) {
+  
+  private func beginUpdateProcess(toVersion: AppCastItem) {
 		let downloadTriggerURL: URL
 		let givenURL = toVersion.appURL
 		if givenURL.scheme == "itms-services" {
@@ -257,6 +268,10 @@ fileprivate extension Shine {
             UIApplication.shared.openURL(downloadTriggerURL)
         }
 	}
+}
+
+fileprivate func localString(_ key: String, comment: String) -> String{
+  return NSLocalizedString(key, tableName: nil, bundle: Bundle(for: Shine.self), value: "---", comment: comment)
 }
 
 // MARK: - App Cast Data Model

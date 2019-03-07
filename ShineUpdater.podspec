@@ -8,6 +8,7 @@ Pod::Spec.new do |s|
   
   s.source = { :git => 'https://github.com/EightyThreeCreative/ShineUpdater.git', :tag => s.version }
 
+  s.resource = 'Shine/*.lproj'
   s.platform = :ios
   s.ios.deployment_target = '8.0'
   s.swift_version = '4.0'
