@@ -90,7 +90,7 @@ fileprivate extension Shine {
 		defaultConfig.validate()
 		self.config = defaultConfig
 		
-		NotificationCenter.default.addObserver(self, selector: #selector(Shine.appDidResume), name: .UIApplicationDidBecomeActive, object: nil)
+    NotificationCenter.default.addObserver(self, selector: #selector(Shine.appDidResume), name: .UIApplicationDidBecomeActive, object: nil)
 	}
 	
 	
@@ -152,8 +152,8 @@ fileprivate extension Shine {
 							let infoDictionary = Bundle.main.infoDictionary!
 							let displayVersion = infoDictionary["CFBundleShortVersionString"] as? String
 							let bundleDisplayname = infoDictionary["CFBundleName"] as? String
-							let noUpdateAlert = UIAlertController(title: "You’re up-to-date!", message: "\(bundleDisplayname ?? "Version") \(displayVersion ?? currentVersionCode) is currently the newest version available.", preferredStyle: .alert)
-							noUpdateAlert.addAction(UIAlertAction(title: "OK", style: .cancel, handler: nil))
+							let noUpdateAlert = UIAlertController(title: NSLocalizedString("UpToDate", comment:"You’re up-to-date!"), message: NSLocalizedString("LatestVersion", comment:"\(bundleDisplayname ?? "Version") \(displayVersion ?? currentVersionCode) is currently the newest version available."), preferredStyle: .alert)
+							noUpdateAlert.addAction(UIAlertAction(title: NSLocalizedString("OKBtn", comment:"OK"), style: .cancel, handler: nil))
 							
 							if let rootVC = UIApplication.shared.keyWindow?.rootViewController {
 								noUpdateAlert.present(from: rootVC, animated: true, completion: nil)
@@ -209,22 +209,28 @@ fileprivate extension Shine {
 		let bundleDisplayname = infoDictionary["CFBundleName"] as? String
 		
 		var releaseNotes = ""
-		if let content = toVersion.releaseNotes, self.config.showReleaseNotes {
-			releaseNotes = "\n\nRelease Notes:\n\n\(content)"
+		if var content = toVersion.releaseNotes, self.config.showReleaseNotes {
+      //:-- content 由';'分割，移除空格后拼接多行
+      content = content.split(separator: ";").map {
+        $0.trimmingCharacters(in: CharacterSet(charactersIn: " "))
+      }.joined(separator: "\n")
+      
+      
+      releaseNotes = NSLocalizedString("ReleaseNote", comment: "\n\nRelease Notes:\n\n\(content)")
 		}
 		
-		let updateStatement = (toVersion.forcedUpdate) ? "This is a required update." : "Would you like to update now?"
+		let updateStatement = (toVersion.forcedUpdate) ?NSLocalizedString("ForceUpdate", comment: "This is a required update."): NSLocalizedString("UpdatePrompt", comment: "Would you like to update now?")
 		
-		let updateAlert = UIAlertController(title: "A new version of \(bundleDisplayname ?? "this app") is available!", message: "\(bundleDisplayname ?? "") \(toVersion.displayVersion ?? toVersion.versionCode) is now available—you have \(displayVersion ?? currentVersionCode). \(updateStatement)\(releaseNotes)", preferredStyle: .alert)
+    let updateAlert = UIAlertController(title: NSLocalizedString("NewVersionMessageTitle", comment:"A new version of \(bundleDisplayname ?? "this app") is available!"), message: NSLocalizedString("NewVersionMessageBody", comment:"\(bundleDisplayname ?? "") \(toVersion.displayVersion ?? toVersion.versionCode) is now available—you have \(displayVersion ?? currentVersionCode). \(updateStatement)\(releaseNotes)"), preferredStyle: .alert)
 		updateAlert.messageLabel?.textAlignment = .left
 		
 		if !toVersion.forcedUpdate {
-			updateAlert.addAction(UIAlertAction(title: "Remind me Later", style: .cancel) { _ in
+			updateAlert.addAction(UIAlertAction(title: NSLocalizedString("RemindLater", comment:"Remind me Later"), style: .cancel) { _ in
 				self.selectedRemindLaterDate = Date()
 			})
 		}
 		
-		updateAlert.addAction(UIAlertAction(title: "Install Update", style: .default) { _ in
+		updateAlert.addAction(UIAlertAction(title: NSLocalizedString("InstallUpdate", comment:"Install Update"), style: .default) { _ in
 			self.beginUpdateProcess(toVersion: toVersion)
 		})
 		
@@ -240,6 +246,9 @@ fileprivate extension Shine {
 			downloadTriggerURL = givenURL
 		} else {
 			downloadTriggerURL = URL(string: "itms-services://?action=download-manifest&url=\(givenURL.absoluteString)")!
+
+			// TODO alert target...
+			print("download from \(downloadTriggerURL)")
 		}
 		
         if #available(iOS 10.0, *) {

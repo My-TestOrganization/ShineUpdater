@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		840154F42230F64C00386F96 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 840154F62230F64C00386F96 /* Localizable.strings */; };
 		982E0638207E4A770033B541 /* Shine.h in Headers */ = {isa = PBXBuildFile; fileRef = 982E0636207E4A770033B541 /* Shine.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		982E063F207E4ADC0033B541 /* Shine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 982E063E207E4ADC0033B541 /* Shine.swift */; };
 		D5AEEB11097397C008460071 /* Pods_Shine.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 111995F85DE48A7131726AC5 /* Pods_Shine.framework */; };
@@ -16,6 +17,8 @@
 /* Begin PBXFileReference section */
 		111995F85DE48A7131726AC5 /* Pods_Shine.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Shine.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		573955AAA66CDA44D7C97AA2 /* Pods-Shine.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Shine.release.xcconfig"; path = "Pods/Target Support Files/Pods-Shine/Pods-Shine.release.xcconfig"; sourceTree = "<group>"; };
+		840154F52230F64C00386F96 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
+		840154F72230F65A00386F96 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/Localizable.strings"; sourceTree = "<group>"; };
 		982E0633207E4A770033B541 /* Shine.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Shine.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		982E0636207E4A770033B541 /* Shine.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Shine.h; sourceTree = "<group>"; };
 		982E0637207E4A770033B541 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -66,6 +69,7 @@
 		982E0635207E4A770033B541 /* Shine */ = {
 			isa = PBXGroup;
 			children = (
+				840154F62230F64C00386F96 /* Localizable.strings */,
 				982E063E207E4ADC0033B541 /* Shine.swift */,
 				F86ABE28209C929700048D9C /* ShineConfig.swift */,
 				982E0641207E4AED0033B541 /* Supporting Files */,
@@ -134,7 +138,7 @@
 				TargetAttributes = {
 					982E0632207E4A770033B541 = {
 						CreatedOnToolsVersion = 9.3;
-						LastSwiftMigration = 0930;
+						LastSwiftMigration = 1010;
 					};
 				};
 			};
@@ -144,6 +148,7 @@
 			hasScannedForEncodings = 0;
 			knownRegions = (
 				en,
+				"zh-Hans",
 			);
 			mainGroup = 982E0629207E4A770033B541;
 			productRefGroup = 982E0634207E4A770033B541 /* Products */;
@@ -160,6 +165,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				840154F42230F64C00386F96 /* Localizable.strings in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -198,11 +204,24 @@
 		};
 /* End PBXSourcesBuildPhase section */
 
+/* Begin PBXVariantGroup section */
+		840154F62230F64C00386F96 /* Localizable.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				840154F52230F64C00386F96 /* en */,
+				840154F72230F65A00386F96 /* zh-Hans */,
+			);
+			name = Localizable.strings;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
 /* Begin XCBuildConfiguration section */
 		982E0639207E4A770033B541 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
@@ -266,6 +285,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
@@ -332,7 +352,7 @@
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				INFOPLIST_FILE = "$(SRCROOT)/Shine/Supporting Files/Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 9.3;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -360,7 +380,7 @@
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				INFOPLIST_FILE = "$(SRCROOT)/Shine/Supporting Files/Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 9.3;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
